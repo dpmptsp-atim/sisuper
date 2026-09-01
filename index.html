@@ -3,81 +3,125 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>SiSUPER - Sistem Surat Tugas & Perjalanan Dinas</title>
-  <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/c/c9/Logo_SiSUPER.png" />
+  <title>SiASU - Sistem Agenda Surat</title>
+  <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/1/14/Logo_SPD.png" />
   <style>
- /* --- STYLES FOR LOADING SCREEN --- */
-        .loading-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #121212; /* Warna latar belakang loading */
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999; /* Memastikan loading berada di paling atas */
-            transition: opacity 0.5s ease, visibility 0.5s ease;
-        }
+    /* --- STYLES FOR MODERN LOADING SCREEN --- */
+    .loading-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.6s;
+    }
 
-        /* Animasi Spinner Putar */
-        .spinner {
-            width: 50px;
-            height: 50px;
-            border: 5px solid #333;
-            border-top: 5px solid #3498db; /* Warna aksen loading */
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
+    /* Ring Glowing Outer Animation */
+    .spinner-wrapper {
+      position: relative;
+      width: 80px;
+      height: 80px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
 
-        /* Teks Loading */
-        .loading-text {
-            color: #ffffff;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin-top: 15px;
-            font-size: 18px;
-            letter-spacing: 1px;
-        }
+    .spinner {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border: 3px solid transparent;
+      border-top-color: #38bdf8;
+      border-right-color: #818cf8;
+      border-radius: 50%;
+      animation: spin 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+      box-shadow: 0 0 15px rgba(56, 189, 248, 0.3);
+    }
 
-        /* Efek Hilang (Fade Out) */
-        .loading-hidden {
-            opacity: 0;
-            visibility: hidden;
-        }
+    .spinner-inner {
+      width: 60%;
+      height: 60%;
+      border: 3px solid transparent;
+      border-bottom-color: #c084fc;
+      border-left-color: #f472b6;
+      border-radius: 50%;
+      animation: spin-reverse 0.8s linear infinite;
+    }
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
+    /* Core Pulsing Dot */
+    .spinner-core {
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      background-color: #38bdf8;
+      border-radius: 50%;
+      box-shadow: 0 0 12px #38bdf8;
+      animation: pulse 1.5s ease-in-out infinite;
+    }
 
-        /* --- STYLES UNTUK KONTEN UTAMA --- */
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: sans-serif;
-            background-color: #f4f4f4;
-        }
-        .content {
-            padding: 40px;
-            text-align: center;
-        }   
+    /* Teks Loading Modern */
+    .loading-title {
+      color: #f8fafc;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      margin-top: 24px;
+      font-size: 20px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      background: linear-gradient(to right, #38bdf8, #818cf8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
 
+    .loading-subtitle {
+      color: #94a3b8;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      font-size: 13px;
+      margin-top: 6px;
+      letter-spacing: 0.5px;
+    }
 
+    /* Efek Transisi Keluar */
+    .loading-hidden {
+      opacity: 0;
+      visibility: hidden;
+    }
 
-   html, body {
+    /* Keyframe Animations */
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @keyframes spin-reverse {
+      0% { transform: rotate(360deg); }
+      100% { transform: rotate(0deg); }
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(0.8); opacity: 0.5; }
+      50% { transform: scale(1.2); opacity: 1; }
+    }
+
+    /* --- STYLES UNTUK KONTEN UTAMA --- */
+    html, body {
       margin: 0;
       padding: 0;
       width: 100%;
       height: 100%;
-      background-color: #eee;
-      overflow: hidden; /* Mencegah scroll ganda */
+      background-color: #0f172a;
+      overflow: hidden;
     }
 
     .iframe-container {
       width: 100%;
-      height: 100dvh; /* Menggunakan dvh agar pas di mobile browser */
+      height: 100dvh;
       overflow: hidden;
     }
 
@@ -90,11 +134,16 @@
   </style>
 </head>
 <body>
-<!-- LAYER LOADING SCREEN --->
-    <div class="loading-container" id="loadingScreen">
-        <div class="spinner"></div>
-        <div class="loading-text">Memuat halaman...</div>
+
+  <div class="loading-container" id="loadingScreen">
+    <div class="spinner-wrapper">
+      <div class="spinner"></div>
+      <div class="spinner-inner"></div>
+      <div class="spinner-core"></div>
     </div>
+    <div class="loading-title">SiSUPER</div>
+    <div class="loading-subtitle">Memuat Sistem Surat Tugas dan Perjalanan Dinas...</div>
+  </div>
 
   <div class="iframe-container">
     <iframe
@@ -107,18 +156,17 @@
       allow="fullscreen; camera; microphone; display-capture; geolocation;">
     </iframe>
   </div>
-  
-  
-  <!-- SCRIPT JAVASCRIPT -->
-    <script>
-        // Menunggu sampai seluruh halaman (gambar, stylesheet, dll.) selesai dimuat
-        window.addEventListener("load", function () {
-            const loader = document.getElementById("loadingScreen");
-            
-            // Menambahkan class untuk efek fade-out
-            loader.classList.add("loading-hidden");
-        });
-    </script>
-  
+
+  <script>
+    window.addEventListener("load", function () {
+      const loader = document.getElementById("loadingScreen");
+      
+      // Memberikan jeda singkat agar transisi terasa smooth
+      setTimeout(() => {
+        loader.classList.add("loading-hidden");
+      }, 300);
+    });
+  </script>
+
 </body>
 </html>
